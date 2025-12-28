@@ -55,7 +55,7 @@ async def test_post_new_recipe_validation_error(test_client):
 async def test_get_recipe_by_id(test_client, test_data):
     test_id = 1
     response = await test_client.get(f"/recipes/{test_id}")
-    content: dict = response.json()
+    content = response.json()
     assert response.status_code == 200
     assert isinstance(content, dict)
     assert content["id"] == test_id
@@ -69,7 +69,7 @@ async def test_get_recipe_by_id(test_client, test_data):
 async def test_get_recipe_by_wrong_id(test_client, test_data):
     test_id = 9
     response = await test_client.get(f"/recipes/{test_id}")
-    content: dict = response.json()
+    content = response.json()
     assert response.status_code == 404
     assert isinstance(content, dict)
     assert f"id={test_id}" in content["detail"]
@@ -78,7 +78,7 @@ async def test_get_recipe_by_wrong_id(test_client, test_data):
 @pytest.mark.asyncio
 async def test_get_recipe_by_id_validation_error(test_client, test_data):
     response = await test_client.get("/recipes/X")
-    content: dict = response.json()
+    content = response.json()
     assert response.status_code == 422
     assert isinstance(content, dict)
     assert "valid integer" in json.dumps(content["detail"])
