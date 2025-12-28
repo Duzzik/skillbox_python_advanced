@@ -63,7 +63,7 @@ db.sqlite3
 db.sqlite3-journal
 
 # Flask stuff:
-instance/
+code/instance/
 .webassets-cache
 
 # Scrapy stuff:
@@ -105,7 +105,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+code/.env
 .venv
 env/
 venv/

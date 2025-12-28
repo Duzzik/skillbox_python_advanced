@@ -4,7 +4,13 @@ import sys
 import pytest_asyncio
 from dotenv import load_dotenv
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncSession, async_sessionmaker, create_async_engine
+)
+
+from code.app.database import Base
+from code.app.models import Ingredients, Recipes
+from code.main import app, get_db
 
 load_dotenv(".env_test")
 TEST_DATABASE_URL = os.getenv("DATABASE_URL")
@@ -31,10 +37,6 @@ RECIPES = [
 ]
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from ..app.database import Base
-from ..app.models import Ingredients, Recipes
-from ..main import app, get_db
 
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=True, future=True)
 
@@ -72,7 +74,10 @@ async def test_data():
         async with session.begin():
             for full_dict in RECIPES:
                 recipe_dict = {
-                    key: val for key, val in full_dict.items() if key != "ingredients"
+                    key: val
+                    for key, val
+                    in full_dict.items()
+                    if key != "ingredients"
                 }
                 recipe_obj = Recipes(**recipe_dict)
                 recipe_obj.ingredients = [

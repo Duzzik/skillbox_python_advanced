@@ -1,4 +1,5 @@
 import pytest
+import json
 
 
 @pytest.mark.asyncio
@@ -36,7 +37,9 @@ async def test_post_new_recipe(test_client, test_data):
     content = response.json()
     assert response.status_code == 200
     assert isinstance(content, dict)
-    assert {key: val for key, val in content.items() if key != "id"} == test_recipe
+    assert {
+        key: val for key, val in content.items() if key != "id"
+    } == test_recipe
 
 
 @pytest.mark.asyncio
@@ -46,7 +49,7 @@ async def test_post_new_recipe_validation_error(test_client):
     content = response.json()
     assert response.status_code == 422
     assert isinstance(content, dict)
-    assert any(["100 characters" in detail["msg"] for detail in content["detail"]])
+    assert "100 characters" in json.dumps(content["detail"])
 
 
 @pytest.mark.asyncio
@@ -58,9 +61,14 @@ async def test_get_recipe_by_id(test_client, test_data):
     assert isinstance(content, dict)
     assert content["id"] == test_id
     expected = {
-        key: val for key, val in test_data[test_id - 1].items() if key != "views_number"
+        key: val
+        for key, val
+        in test_data[test_id - 1].items()
+        if key != "views_number"
     }
-    assert {key: val for key, val in content.items() if key != "id"} == expected
+    assert {
+        key: val for key, val in content.items() if key != "id"
+    } == expected
 
 
 @pytest.mark.asyncio
@@ -75,8 +83,8 @@ async def test_get_recipe_by_wrong_id(test_client, test_data):
 
 @pytest.mark.asyncio
 async def test_get_recipe_by_id_validation_error(test_client, test_data):
-    response = await test_client.get(f"/recipes/X")
+    response = await test_client.get("/recipes/X")
     content: dict = response.json()
     assert response.status_code == 422
     assert isinstance(content, dict)
-    assert any(["valid integer" in detail["msg"] for detail in content["detail"]])
+    assert "valid integer" in json.dumps(content["detail"])
