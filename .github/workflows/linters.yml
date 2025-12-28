@@ -1,0 +1,27 @@
+name: Linters
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.12-slim
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install linters
+        run: |
+          pip install --no-cache-dir black flake8
+
+      - name: Check Black formatting
+        run: |
+          black --check --diff .
+
+      - name: Run flake8 (optional)
+        run: |
+          flake8 .
