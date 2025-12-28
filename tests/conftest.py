@@ -1,10 +1,10 @@
-import sys
 import os
+import sys
 
-from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 import pytest_asyncio
+from dotenv import load_dotenv
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 load_dotenv(".env_test")
 TEST_DATABASE_URL = os.getenv("DATABASE_URL")
@@ -18,29 +18,29 @@ RECIPES = [
         "ingredients": [
             {"title": "Крупа"},
             {"title": "Молоко"},
-            {"title": "Соль (по вкусу)"}
-        ]
-    }, {
+            {"title": "Соль (по вкусу)"},
+        ],
+    },
+    {
         "title": "Каша с маслом",
         "recipe": "Возьмите кашу. Добавьте масло.",
         "views_number": 1,
         "cooking_time": 21,
-        "ingredients": [
-            {"title": "Каша"},
-            {"title": "Масло"}
-        ]
-    }
+        "ingredients": [{"title": "Каша"}, {"title": "Масло"}],
+    },
 ]
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from ..app.database import Base
+from ..app.models import Ingredients, Recipes
 from ..main import app, get_db
-from ..app.models import Recipes, Ingredients
 
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=True, future=True)
 
-AsyncSessionLocal = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
+AsyncSessionLocal = async_sessionmaker(
+    test_engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def get_test_db():
@@ -56,8 +56,7 @@ async def test_client():
     app.dependency_overrides[get_db] = get_test_db
 
     async with AsyncClient(
-            transport=ASGITransport(app),
-            base_url=os.getenv("API_URL")
+        transport=ASGITransport(app), base_url=os.getenv("API_URL")
     ) as client:
         yield client
 
@@ -72,12 +71,13 @@ async def test_data():
     async with AsyncSessionLocal() as session:
         async with session.begin():
             for full_dict in RECIPES:
-                recipe_dict = {key: val for key, val in full_dict.items() if key != "ingredients"}
+                recipe_dict = {
+                    key: val for key, val in full_dict.items() if key != "ingredients"
+                }
                 recipe_obj = Recipes(**recipe_dict)
                 recipe_obj.ingredients = [
                     Ingredients(title=ingredient["title"])
-                    for ingredient
-                    in full_dict["ingredients"]
+                    for ingredient in full_dict["ingredients"]
                 ]
                 await session.merge(recipe_obj)
     yield RECIPES

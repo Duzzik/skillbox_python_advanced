@@ -21,9 +21,7 @@ class RecipeIn(BaseRecipe):
 class RecipeListOut(BaseRecipe):
     views_number: int
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RecipeOut(BaseRecipe):
@@ -31,14 +29,10 @@ class RecipeOut(BaseRecipe):
     recipe: str
     ingredients: List[BaseIngredient]
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RecipeOutFull(RecipeOut):
     views_number: int
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

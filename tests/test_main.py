@@ -19,7 +19,8 @@ async def test_get_recipes_list_with_data(test_client, test_data):
     assert len(content) == len(test_data)
     expected = [
         {
-            key: val for key, val in recipe.items()
+            key: val
+            for key, val in recipe.items()
             if key in ("title", "views_number", "cooking_time")
         }
         for recipe in test_data
@@ -56,7 +57,9 @@ async def test_get_recipe_by_id(test_client, test_data):
     assert response.status_code == 200
     assert isinstance(content, dict)
     assert content["id"] == test_id
-    expected = {key: val for key, val in test_data[test_id - 1].items() if key != "views_number"}
+    expected = {
+        key: val for key, val in test_data[test_id - 1].items() if key != "views_number"
+    }
     assert {key: val for key, val in content.items() if key != "id"} == expected
 
 
