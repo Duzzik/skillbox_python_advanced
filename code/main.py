@@ -1,3 +1,6 @@
+import code.app.models as models
+import code.app.schemas as schemas
+from code.app.database import create_tables, get_db
 from contextlib import asynccontextmanager
 from typing import List
 
@@ -6,10 +9,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-
-import code.app.models as models
-import code.app.schemas as schemas
-from code.app.database import create_tables, get_db
 
 
 @asynccontextmanager
@@ -44,12 +43,7 @@ async def add_recipes(
 ) -> models.Recipes:
     data_dict = recipe_data.model_dump()
 
-    recipe_dict = {
-        key: val
-        for key, val
-        in data_dict.items()
-        if key != "ingredients"
-    }
+    recipe_dict = {key: val for key, val in data_dict.items() if key != "ingredients"}
 
     recipe_obj = models.Recipes(**recipe_dict)
     recipe_obj.ingredients = [
@@ -62,10 +56,7 @@ async def add_recipes(
             merged_recipe = await db.merge(recipe_obj)
         return merged_recipe
     except Exception as err:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(err)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(err))
 
 
 @app.get("/recipes/{recipe_id}", response_model=schemas.RecipeOut)
