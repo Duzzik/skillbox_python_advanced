@@ -1,13 +1,17 @@
 import os
 import sys
-from code.app.database import Base
-from code.app.models import Ingredients, Recipes
-from code.main import app, get_db
 
 import pytest_asyncio
 from dotenv import load_dotenv
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
+# sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from app.database import Base  # noqa: E402
+from app.models import Ingredients, Recipes  # noqa: E402
+from main import app, get_db  # noqa: E402
 
 load_dotenv(".env_test")
 TEST_DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
@@ -32,8 +36,6 @@ RECIPES = [
         "ingredients": [{"title": "Каша"}, {"title": "Масло"}],
     },
 ]
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=True, future=True)
 

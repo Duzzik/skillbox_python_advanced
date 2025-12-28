@@ -1,6 +1,3 @@
-import code.app.models as models
-import code.app.schemas as schemas
-from code.app.database import create_tables, get_db
 from contextlib import asynccontextmanager
 from typing import List
 
@@ -9,6 +6,10 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
+
+import app.models as models
+import app.schemas as schemas
+from app.database import create_tables, get_db
 
 
 @asynccontextmanager

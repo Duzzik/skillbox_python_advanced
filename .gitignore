@@ -63,7 +63,7 @@ db.sqlite3
 db.sqlite3-journal
 
 # Flask stuff:
-code/instance/
+instance/
 .webassets-cache
 
 # Scrapy stuff:
@@ -140,3 +140,4 @@ dmypy.json
 *.db
 *.sqlite3
 /module_27_postgres_migrations/hw/db.sh
+/.env
