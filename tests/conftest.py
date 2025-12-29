@@ -14,8 +14,7 @@ from app.models import Ingredients, Recipes  # noqa: E402
 from main import app, get_db  # noqa: E402
 
 load_dotenv("../.env_test")
-# TEST_DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
-TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+TEST_DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
 
 RECIPES = [
     {

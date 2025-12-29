@@ -1,12 +1,11 @@
-# import os
+import os
 
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
 
 load_dotenv()
-# DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
-DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
 
 Base = declarative_base()
 
