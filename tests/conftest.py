@@ -60,7 +60,7 @@ async def test_client():
 
     async with AsyncClient(
         transport=ASGITransport(app),
-        base_url=os.getenv("API_URL", "http://localhost:8000")
+        base_url=os.getenv("API_URL", "http://localhost:8000"),
     ) as client:
         yield client
 
