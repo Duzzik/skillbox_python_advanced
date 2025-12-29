@@ -13,7 +13,7 @@ from app.database import Base  # noqa: E402
 from app.models import Ingredients, Recipes  # noqa: E402
 from main import app, get_db  # noqa: E402
 
-load_dotenv(".env_test")
+load_dotenv("../.env_test")
 TEST_DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
 
 RECIPES = [
@@ -36,6 +36,7 @@ RECIPES = [
         "ingredients": [{"title": "Каша"}, {"title": "Масло"}],
     },
 ]
+
 
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=True, future=True)
 
