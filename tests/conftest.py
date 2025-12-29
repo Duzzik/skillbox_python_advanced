@@ -14,7 +14,8 @@ from app.models import Ingredients, Recipes  # noqa: E402
 from main import app, get_db  # noqa: E402
 
 load_dotenv("../.env_test")
-TEST_DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
+# TEST_DATABASE_URL = os.getenv("DATABASE_URL") or "sqlite+aiosqlite:///:memory:"
+TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 RECIPES = [
     {
@@ -58,7 +59,7 @@ async def test_client():
     app.dependency_overrides[get_db] = get_test_db
 
     async with AsyncClient(
-        transport=ASGITransport(app), base_url=os.getenv("API_URL")
+        transport=ASGITransport(app), base_url=os.getenv("API_URL", "http://localhost:8000")
     ) as client:
         yield client
 
