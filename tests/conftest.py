@@ -59,7 +59,8 @@ async def test_client():
     app.dependency_overrides[get_db] = get_test_db
 
     async with AsyncClient(
-        transport=ASGITransport(app), base_url=os.getenv("API_URL", "http://localhost:8000")
+        transport=ASGITransport(app),
+        base_url=os.getenv("API_URL", "http://localhost:8000")
     ) as client:
         yield client
 
